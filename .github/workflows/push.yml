@@ -1,0 +1,24 @@
+on: push
+name: packtracker.io
+jobs:
+  report-cra:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: report webpack stats
+      uses: packtracker/report@2.2.8
+      env:
+        PT_PROJECT_TOKEN: ${{ secrets.PT_CRA_PROJECT_TOKEN }}
+        PT_PROJECT_ROOT: ./test-cra-3
+  report-next:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run next.js build
+        env:
+          PT_PROJECT_TOKEN: ${{ secrets.PT_NEXT_PROJECT_TOKEN }}
+        run: |
+          sudo apt-get update && sudo apt-get install git yarn -y && sudo rm -rf /var/lib/apt/lists/*
+          cd test-next
+          yarn
+          yarn build
